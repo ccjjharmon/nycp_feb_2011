@@ -1,3 +1,5 @@
+using nothinbutdotnetprep.collections;
+
 namespace nothinbutdotnetprep.infrastructure.filtering
 {
     public static class CriteriaExtensions

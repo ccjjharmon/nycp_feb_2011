@@ -1,12 +1,11 @@
 ﻿using System;
-using nothinbutdotnetprep.collections;
 
 namespace nothinbutdotnetprep.infrastructure.filtering
 {
-    public class Where<T>
+    public class Where<ItemToFilter>
     {
-        
-        public static ProductionStudio has_a(Func<T, ProductionStudio> func)
+        public static void has_a<PropertyType>(PropertyAccessor<ItemToFilter,PropertyType> 
+            property_accessor)
         {
             throw new NotImplementedException();
         }
