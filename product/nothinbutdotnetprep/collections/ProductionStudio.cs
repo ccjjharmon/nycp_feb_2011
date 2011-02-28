@@ -1,4 +1,5 @@
 using System;
+using nothinbutdotnetprep.infrastructure.filtering;
 
 namespace nothinbutdotnetprep.collections
 {
@@ -13,6 +14,11 @@ namespace nothinbutdotnetprep.collections
 
 
         public int CompareTo(ProductionStudio other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Criteria<Movie> equal_to(ProductionStudio studio)
         {
             throw new NotImplementedException();
         }
