@@ -18,12 +18,24 @@ namespace nothinbutdotnetprep.infrastructure.filtering
 
         public Criteria<ItemToFilter> equal_to_any(params PropertyType[] possible_values)
         {
-            throw new NotImplementedException();
+            Criteria<ItemToFilter> criteria = null;
+            for (int i = 0; i < possible_values.Length; i++)
+            {
+                if (i == 0)
+                {
+                    criteria = equal_to(possible_values[i]);
+                }
+                else
+                {
+                    criteria = criteria.or<ItemToFilter>(equal_to(possible_values[i]));
+                }
+            }
+            return criteria;
         }
 
         public Criteria<ItemToFilter> not_equal_to(PropertyType value)
         {
-            throw new NotImplementedException();
+            return equal_to(value).not();
         }
     }
 }
