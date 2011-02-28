@@ -80,9 +80,9 @@ namespace nothinbutdotnetprep.collections
                 {
                     if (imovie.title == movie.title && imovie.date_published.Equals(movie.date_published)) return;
                 }
-                //if couldn't be found, go ahead and add
-                movies.Add(movie);
             }
+            //if couldn't be found, go ahead and add
+            movies.Add(movie);
         }
 
         public IEnumerable<Movie> sort_all_movies_by_title_descending
