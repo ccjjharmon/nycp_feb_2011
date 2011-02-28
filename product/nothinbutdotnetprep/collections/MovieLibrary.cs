@@ -1,5 +1,6 @@
-using System;
 using System.Collections.Generic;
+using nothinbutdotnetprep.infrastructure;
+using nothinbutdotnetprep.infrastructure.filtering;
 
 namespace nothinbutdotnetprep.collections
 {
@@ -14,108 +15,105 @@ namespace nothinbutdotnetprep.collections
 
         public IEnumerable<Movie> all_movies()
         {
-            return movies;
+            return movies.one_at_a_time();
         }
 
         public void add(Movie movie)
         {
-            if(!movies.Contains(movie))
-                movies.Add(movie);
+            if (already_contains(movie)) return;
+
+            movies.Add(movie);
+        }
+
+        bool already_contains(Movie movie)
+        {
+            return movies.Contains(movie);
+        }
+
+        public IEnumerable<Movie> all_movies_matching(Condition<Movie> condition)
+        {
+            return movies.all_items_matching(new ConditionalCriteria<Movie>(condition));
+        }
+
+        public IEnumerable<Movie> all_movies_published_by_pixar()
+        {
+            return all_movies_matching(movie => movie.production_studio == ProductionStudio.Pixar);
+        }
+
+        public IEnumerable<Movie> all_movies_published_after(int year)
+        {
+            return all_movies_matching(m => m.date_published.Year > year);
+        }
+
+        public IEnumerable<Movie> all_action_movies()
+        {
+            return all_movies_matching(m => m.genre == Genre.action);
+        }
+
+        public IEnumerable<Movie> all_kid_movies()
+        {
+            return all_movies_matching(m => m.genre == Genre.kids);
+        }
+
+        public IEnumerable<Movie> all_movies_published_between_years(int startingYear, int endingYear)
+        {
+            return all_movies_matching(m => m.date_published.Year > startingYear && m.date_published.Year < endingYear);
+        }
+
+        public IEnumerable<Movie> all_movies_not_published_by_pixar()
+        {
+            return all_movies_matching(m => m.production_studio != ProductionStudio.Pixar);
+        }
+
+        public IEnumerable<Movie> all_movies_published_by_pixar_or_disney()
+        {
+            return all_movies_matching(
+                m => m.production_studio == ProductionStudio.Pixar || m.production_studio == ProductionStudio.Disney);
         }
 
         public IEnumerable<Movie> sort_all_movies_by_title_descending
         {
             get
             {
-                List<Movie> lm = (List<Movie>)movies;
+                var lm = (List<Movie>) movies;
                 lm.Sort(new SortMoviesByDescendingTitle());
                 return lm;
-        
             }
-        }
-
-        public IEnumerable<Movie> all_movies_published_by_pixar()
-        {
-            List<Movie> lm = (List<Movie>) movies;
-            return lm.FindAll(m => m.production_studio == ProductionStudio.Pixar);
-        }
-
-        public IEnumerable<Movie> all_movies_published_by_pixar_or_disney()
-        {
-            List<Movie> lm = (List<Movie>)movies;
-            return lm.FindAll(m => m.production_studio == ProductionStudio.Pixar || m.production_studio == ProductionStudio.Disney);
         }
 
         public IEnumerable<Movie> sort_all_movies_by_title_ascending
         {
-        
             get
             {
-                
-                List<Movie> lm =(List<Movie>) movies;
+                var lm = (List<Movie>) movies;
                 lm.Sort(new SortMoviesByAscendingTitle());
                 return lm;
-                
             }
         }
 
         public IEnumerable<Movie> sort_all_movies_by_movie_studio_and_year_published()
         {
-            List<Movie> lm = (List<Movie>)movies;
+            var lm = (List<Movie>) movies;
             lm.Sort(new SortMoviesByStudioAndYear());
             return lm;
         }
 
-        public IEnumerable<Movie> all_movies_not_published_by_pixar()
-        {
-            List<Movie> lm = (List<Movie>)movies;
-            return lm.FindAll(m => m.production_studio != ProductionStudio.Pixar);
-        }
-
-        public IEnumerable<Movie> all_movies_published_after(int year)
-        {
-            List<Movie> lm = (List<Movie>)movies;
-            return lm.FindAll(m => m.date_published.Year > year);
-
-        }
-
-        public IEnumerable<Movie> all_movies_published_between_years(int startingYear, int endingYear)
-        {
-            List<Movie> lm = (List<Movie>)movies;
-            return lm.FindAll(m => m.date_published.Year > startingYear && m.date_published.Year < endingYear);
-        }
-
-        public IEnumerable<Movie> all_kid_movies()
-        {
-            List<Movie> lm = (List<Movie>)movies;
-            return lm.FindAll(m => m.genre==Genre.kids);
-        }
-
-        public IEnumerable<Movie> all_action_movies()
-        {
-            List<Movie> lm = (List<Movie>)movies;
-            return lm.FindAll(m => m.genre == Genre.action);
-        }
-
         public IEnumerable<Movie> sort_all_movies_by_date_published_descending()
         {
-            List<Movie> lm = (List<Movie>)movies;
-             lm.Sort(new SortMoviesByDescendingPublishedDate());
+            var lm = (List<Movie>) movies;
+            lm.Sort(new SortMoviesByDescendingPublishedDate());
             return lm;
         }
 
- 
-
         public IEnumerable<Movie> sort_all_movies_by_date_published_ascending()
         {
-            List<Movie> lm = (List<Movie>)movies;
+            var lm = (List<Movie>) movies;
             lm.Sort(new SortMoviesByAscendingPublishedDate());
             return lm;
         }
 
-        private class SortMoviesByDescendingPublishedDate:IComparer<Movie>
+        class SortMoviesByDescendingPublishedDate : IComparer<Movie>
         {
-
             #region IComparer<Movie> Members
 
             public int Compare(Movie x, Movie y)
@@ -125,9 +123,9 @@ namespace nothinbutdotnetprep.collections
 
             #endregion
         }
-                private class SortMoviesByAscendingPublishedDate:IComparer<Movie>
-        {
 
+        class SortMoviesByAscendingPublishedDate : IComparer<Movie>
+        {
             #region IComparer<Movie> Members
 
             public int Compare(Movie x, Movie y)
@@ -137,10 +135,9 @@ namespace nothinbutdotnetprep.collections
 
             #endregion
         }
- 
-        private class SortMoviesByAscendingTitle:IComparer<Movie>
-        {
 
+        class SortMoviesByAscendingTitle : IComparer<Movie>
+        {
             #region IComparer<Movie> Members
 
             public int Compare(Movie x, Movie y)
@@ -152,9 +149,8 @@ namespace nothinbutdotnetprep.collections
             #endregion
         }
 
-        private class SortMoviesByDescendingTitle : IComparer<Movie>
+        class SortMoviesByDescendingTitle : IComparer<Movie>
         {
-
             #region IComparer<Movie> Members
 
             public int Compare(Movie x, Movie y)
@@ -166,23 +162,17 @@ namespace nothinbutdotnetprep.collections
         }
 
         //SortMoviesByStudioAndYear
-        private class SortMoviesByStudioAndYear : IComparer<Movie>
+        class SortMoviesByStudioAndYear : IComparer<Movie>
         {
-
             #region IComparer<Movie> Members
 
             public int Compare(Movie x, Movie y)
             {
-
                 return x.production_studio.CompareTo(y.production_studio) +
-                       x.date_published.Year.CompareTo(y.date_published.Year);
-
+                    x.date_published.Year.CompareTo(y.date_published.Year);
             }
 
             #endregion
         }
-
     }
-
-
 }
