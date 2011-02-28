@@ -1,13 +1,12 @@
-﻿using System;
-
-namespace nothinbutdotnetprep.infrastructure.filtering
+﻿namespace nothinbutdotnetprep.infrastructure.filtering
 {
     public class Where<ItemToFilter>
     {
-        public static void has_a<PropertyType>(PropertyAccessor<ItemToFilter,PropertyType> 
-            property_accessor)
+        public static CriteriaFactory<ItemToFilter, PropertyType> has_a<PropertyType>(
+            PropertyAccessor<ItemToFilter, PropertyType>
+                property_accessor)
         {
-            throw new NotImplementedException();
+            return new CriteriaFactory<ItemToFilter, PropertyType>(property_accessor);
         }
     }
 }
