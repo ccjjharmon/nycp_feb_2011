@@ -94,7 +94,7 @@ namespace nothinbutdotnetprep.collections
         public IEnumerable<Movie> sort_all_movies_by_movie_studio_and_year_published()
         {
             var lm = (List<Movie>) movies;
-            lm.Sort(new SortMoviesByStudioAndYear());
+            lm.Sort((x,y) => 0);
             return lm;
         }
 
@@ -162,17 +162,5 @@ namespace nothinbutdotnetprep.collections
         }
 
         //SortMoviesByStudioAndYear
-        class SortMoviesByStudioAndYear : IComparer<Movie>
-        {
-            #region IComparer<Movie> Members
-
-            public int Compare(Movie x, Movie y)
-            {
-                return x.production_studio.CompareTo(y.production_studio) +
-                    x.date_published.Year.CompareTo(y.date_published.Year);
-            }
-
-            #endregion
-        }
     }
 }

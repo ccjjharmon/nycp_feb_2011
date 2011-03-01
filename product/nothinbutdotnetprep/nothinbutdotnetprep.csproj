@@ -65,11 +65,13 @@
     <Compile Include="collections\ProductionStudio.cs" />
     <Compile Include="collections\ReadOnlySetOf.cs" />
     <Compile Include="infrastructure\Condition.cs" />
+    <Compile Include="infrastructure\filtering\ComparableCriteriaFactory.cs" />
     <Compile Include="infrastructure\filtering\ConditionalCriteria.cs" />
     <Compile Include="infrastructure\filtering\Criteria.cs" />
     <Compile Include="infrastructure\EnumerableExtensions.cs" />
     <Compile Include="infrastructure\filtering\CriteriaExtensions.cs" />
     <Compile Include="infrastructure\filtering\CriteriaFactory.cs" />
+    <Compile Include="infrastructure\filtering\DefaultCriteriaFactory.cs" />
     <Compile Include="infrastructure\filtering\DoesNotMatchAnything.cs" />
     <Compile Include="infrastructure\filtering\NotCriteria.cs" />
     <Compile Include="infrastructure\filtering\OrCriteria.cs" />
